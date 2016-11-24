@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>caculator</title>
+	<style>
+	input{
+		display: block;
+		width: 266px;
+		height: 50px;
+		margin-left: 2px;
+	}
+	div{
+		width: 270px;
+		margin: 100px auto;
+		position: relative;
+	}
+	button{
+		width: 50px;
+		height: 50px;
+		margin: 2px;
+		float: left;
+	}
+	.heighter{
+		width: 50px;
+		height: 104px;
+		margin: 2px;
+		float: left;
+		position: absolute;
+		top: 212px;
+		right: 0px;
+	}
+	.widther{
+		width: 104px;
+		height: 50px;
+		margin: 2px;
+		float: left;
+		position: absolute;
+		top: 266px;
+		left: 0px;
+	}
+	.widther-with-first{
+		position: absolute;
+		top: 266px;
+		left: 108px;
+	}
+	.widther-with-two{
+		position: absolute;
+		top: 266px;
+		left: 162px;
+	}
+	</style>
+</head>
+<body>	
+	<div>
+		<input type="button" value="0" id="result" ></input>
+		<button type="button" onclick="functionSquare()">x^2</button>
+		<button type="button" onclick="functionRadical()">x^1/2</button>
+		<button type="button" onclick="functionInverse()">x^-1</button>
+		<button type="button" onclick="functionModel()">%</button>
+		<button type="button" onclick="functionEvilAndJustice()">-/+</button>
+		<button type="button" onclick="functiondata(1)">1</button>
+		<button type="button" onclick="functiondata(2)">2</button>
+		<button type="button" onclick="functiondata(3)">3</button>
+		<button type="button" onclick="functionAdd()">+</button>
+		<button type="button" onclick="functionDelete()">C</button>
+		<button type="button" onclick="functiondata(4)">4</button>
+		<button type="button" onclick="functiondata(5)">5</button>
+		<button type="button" onclick="functiondata(6)">6</button>
+		<button type="button" onclick="functionMinus('-')">-</button>
+		<button type="button" onclick="functionBackspace()">CE</button>
+		<button type="button" onclick="functiondata(7)">7</button>
+		<button type="button" onclick="functiondata(8)">8</button>
+		<button type="button" onclick="functiondata(9)">9</button>
+		<button type="button" onclick="functionMultiply()">*</button>
+		<button type="button" onclick="functionEqoute()" class="heighter">=</button>
+		<button type="button" onclick="functiondata(0)" class="widther">0</button>
+		<button type="button" onclick="functionPoint()" class="widther-with-first">.</button>
+		<button type="button" onclick="functionDivede()" class="widther-with-two">/</button>
+	</div>
+	<script>
+		var temp=0;//将结果暂时存储在这;
+		var data=1;//给第一操作数立的flag;
+		var numMark=false;//给第二操作数立的flag，判断是否其为个位数
+		var numAccumulation=0;//将第二操作数储存在这
+		var afterOperation=false;//判断是否经过运算。是就为true；否就是false；
+		var afterEquote=false;//是否要输出结果的flag；
+		var self=false;//还没进行运算就那个自加自减等
+		var afterSelf=1;//是否是进行了运算后才自己那个的自加自减等
+		var point=0;//是否进行有进行浮点数运算的欲望
+		var secondDataPointMark=false;//用来判断第二个操作数是否为小数，主要是在输出时决定了是否有小数点
+		var selfNum=0;
+		var add=false;
+		var minus=false;
+		var multiply=false;
+		var divede=false;
+		var square=false;
+		var radical=false;
+		var inverse=false;
+		var model=false;
+		var evilAndjustice=false;
+		function functiondata(num){
+		 	var a=document.getElementById("result"); //获取到元素，不再细说
+		 	var i;
+		 	if(point!=0) point=point+1;//不可以将这一语句杂糅到下面的if语句
+		 	if(point!=0)for(i=1;i<point;++i)num=num/10; 
+			 if(afterOperation==false){				
+			 if(data==1) a.value=num;
+			 if(data!=1&&point==0)a.value=a.value*data+num;	//这是没按小数点时的情况 	
+			 if(data!=1&&point!=0) a.value=a.value*1+num;//注意如果不乘1，结果会很...
+			 //由data不等于1就可以知道第一操作数不是个位数的，所以data既是flag又是一个使第一操作数变成整型的好东西.
+			 data=10;
+			 temp=a.value;
+			 selfNum=temp;						  
+			 //为了使第一操作数能够变成整型而不是字符型
+			 }//是否经过了运算，在这个大if语句中都是针对第一操作数
+			 else{
+			 if(numMark==false) numAccumulation=num;
+			 else temp=temp-numAccumulation;//因为上次还有数据储存在这，不清掉这多出来的，结果会有点可怕
+			 afterSelf=2;
+			 if(numMark==true&&point!=0)numAccumulation=numAccumulation*1+num;
+			 if(numMark==true&&point==0)numAccumulation=numAccumulation*10+num;//使第二操作数为整型
+			 numMark=true;//现在就可以知道第二操作数不是个位数了
+			 if(add==true) temp=(temp-0)+(numAccumulation-0);
+			  if(minus==true) temp=(temp-0)-(numAccumulation-0);
+			   if(multiply==true) temp=(temp-0)*(numAccumulation-0);
+			    if(divede==true) temp=(temp-0)/(numAccumulation-0);
+			 //避免隐性转为字符型
+			 if(num<1){if(point!=0)for(i=1;i<point;++i)num=num*10;}//因为显示时以字符串显示，所以要有字符串的样子。上下两个语句都是为了这个
+			 if(secondDataPointMark==true)a.value=a.value+'.'+num;
+			 else a.value=a.value+num;
+			 secondDataPointMark=false; 
+			 }
+			 self=false;
+		}//在这个大else语句中是针对第二操作数
+		function functionAdd(){
+			var a=document.getElementById("result");
+			var sign=a.value+'+';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 add=true;
+		 	minus=false;
+		 	multiply=false;
+		 	divede=false;
+		 	square=false;
+		 	radical=false;
+		 	inverse=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionMinus(){
+			var a=document.getElementById("result");
+			var sign=a.value+'-';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 minus=true;
+			 add=false;
+		 	multiply=false;
+		 	divede=false;
+		 	square=false;
+		 	radical=false;
+		 	inverse=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionMultiply(){
+			var a=document.getElementById("result");
+			var sign=a.value+'*';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 multiply=true;
+			 add=false;
+		 	minus=false;
+		  	divede=false;
+		 	square=false;
+		 	radical=false;
+		 	inverse=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionDivede(){
+			var a=document.getElementById("result");
+			var sign=a.value+'/';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 divede=true;
+			 add=false;
+		 	minus=false;
+		 	multiply=false;
+		 	square=false;
+		 	radical=false;
+		 	inverse=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionSquare(){
+			var a=document.getElementById("result");
+			var sign=a.value+'^2';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 square=true;
+			 add=false;
+		 	minus=false;
+		 	multiply=false;
+		 	divede=false;
+		 	radical=false;
+		 	inverse=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionRadical(){
+			var a=document.getElementById("result");
+			var sign=a.value+'^1/2';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 radical=true;
+			 add=false;
+		 	minus=false;
+		 	multiply=false;
+		 	divede=false;
+		 	square=false;
+		 	inverse=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionInverse(){
+			var a=document.getElementById("result");
+			var sign=a.value+'^-1';//只是个输出形式
+			a.value=sign;
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			 inverse=true;
+			 add=false;
+		 	minus=false;
+		 	multiply=false;
+		 	divede=false;
+		 	square=false;
+		 	radical=false;
+		 	model=false;
+			evilAndjustice=false;
+		}
+		function functionModel(){
+			alert("sorry,wait for a moment");
+		}
+		function functionEvilAndJustice(){
+			var a=document.getElementById("result");
+			afterOperation=true;//所以说你想要计算了
+			 numMark=false;
+			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
+			 self=true; 	
+			 point=0;
+			evilAndjustice=true;
+			add=false;
+		 	minus=false;
+		 	multiply=false;
+		 	divede=false;
+		 	square=false;
+		 	radical=false;
+		 	inverse=false;
+		 	model=false;
+		 	temp=temp*((-1)-0);
+		 	a.value=temp;
+		}
+		function functionEqoute(){ 
+			 var a=document.getElementById("result")
+			 if(self==true&&afterSelf==1){
+			 if(add==true)temp=(temp-0)+(selfNum-0);
+			 if(minus==true)temp=(temp-0)-(selfNum-0);
+			 if(multiply==true)temp=(temp-0)*(selfNum-0);
+			 if(divede==true){if(selfNum==0)alert("相信我，分母是不可以为零的");else temp=(temp-0)/(selfNum-0);}
+			}
+			 if(self==true&&afterSelf==2){
+			 if(add==true)temp=(numAccumulation-0)+(temp-0);
+			 if(minus==true)temp=(numAccumulation-0)-(temp-0);
+			 if(multiply==true)temp=(numAccumulation-0)*(temp-0);
+			 if(divede==true)temp=(numAccumulation-0)/(temp-0);
+			 	}
+			 if(square==true)temp=temp*temp;
+			 if(radical==true){if(temp<0)alert("因为我还没有看过根号下还有负数的，所以...");else temp=Math.sqrt(temp);}
+			 if(inverse==true){if(temp==0)alert("其实分母是不可以为零的");else temp=1/temp;}
+			 // if(evilAndjustice==true)temp=temp*((-1)-0);
+			 a.value=temp;
+			afterOperation=false;
+			numMark=false;
+			afterEquote=true;
+			data=1;
+			point=0;
+			self=true;
+			secondDataPointMark=false;
+			
+			//之所以没有初始化numAccumulation，因为接下来如果要使用到
+			}//当按了等号就意味着结束了,或许是新的开始
+			function functionPoint(){
+				point=point+1;
+			 secondDataPointMark=true;
+				if (point>1)
+					alert("小数点错误");
+			}
+			function functionDelete(){
+				document.getElementById("result").value=0;
+				 temp=0;
+				 data=1;
+				 numMark=false;
+				 numAccumulation=0;
+				 afterOperation=false;
+				 afterEquote=false;
+				 self=false;
+				 afterSelf=1;
+				 point=0;
+				 secondDataPointMark=false;
+				 selfNum=0;
+				 add=false;
+				 minus=false;
+				 multiply=false;
+				 divede=false;
+				 square=false;
+		 		 radical=false;
+		 		 inverse=false;
+		 		 model=false;
+			}
+			function functionBackspace(){
+				var a=document.getElementById("result");
+				a.value=a.value.replace(/.$/,'');
+				if(a.value=='')a.value=0;
+			}
+		</script>
+		</body>
+		</html>
