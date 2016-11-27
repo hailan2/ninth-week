@@ -99,12 +99,19 @@
 		var inverse=false;
 		var model=false;
 		var evilAndjustice=false;
+		var backspace=false;
+		var onlyBackspace=false;
+		var noRepeat=false;
+		var monocular=false;
 		function functiondata(num){
 		 	var a=document.getElementById("result"); //获取到元素，不再细说
 		 	var i;
+		 	noRepeat=true; 
 		 	if(point!=0) point=point+1;//不可以将这一语句杂糅到下面的if语句
-		 	if(point!=0)for(i=1;i<point;++i)num=num/10; 
-			 if(afterOperation==false){				
+		 	if(point!=0)for(i=1;i<point;++i)num=num/10;
+		 	//下面的所有语句都是为了运算 
+			 if(afterOperation==false){
+			 onlyBackspace=true;				
 			 if(data==1) a.value=num;
 			 if(data!=1&&point==0)a.value=a.value*data+num;	//这是没按小数点时的情况 	
 			 if(data!=1&&point!=0) a.value=a.value*1+num;//注意如果不乘1，结果会很...
@@ -115,10 +122,11 @@
 			 //为了使第一操作数能够变成整型而不是字符型
 			 }//是否经过了运算，在这个大if语句中都是针对第一操作数
 			 else{
+			 	if(monocular==true)alert("don't do this,please");else{
 			 if(numMark==false) numAccumulation=num;
 			 else temp=temp-numAccumulation;//因为上次还有数据储存在这，不清掉这多出来的，结果会有点可怕
 			 afterSelf=2;
-			 if(numMark==true&&point!=0)numAccumulation=numAccumulation*1+num;
+			 if(numMark==true&&point!=0)numAccumulatin=numAccumulation*1+num;
 			 if(numMark==true&&point==0)numAccumulation=numAccumulation*10+num;//使第二操作数为整型
 			 numMark=true;//现在就可以知道第二操作数不是个位数了
 			 if(add==true) temp=(temp-0)+(numAccumulation-0);
@@ -129,14 +137,16 @@
 			 if(num<1){if(point!=0)for(i=1;i<point;++i)num=num*10;}//因为显示时以字符串显示，所以要有字符串的样子。上下两个语句都是为了这个
 			 if(secondDataPointMark==true)a.value=a.value+'.'+num;
 			 else a.value=a.value+num;
-			 secondDataPointMark=false; 
+			 secondDataPointMark=false;
+			 }
 			 }
 			 self=false;
+			 backspace=true;
 		}//在这个大else语句中是针对第二操作数
 		function functionAdd(){
 			var a=document.getElementById("result");
-			var sign=a.value+'+';//只是个输出形式
-			a.value=sign;
+			if(noRepeat==true){
+			a.value=a.value+'+';//只是个输出形式
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -150,12 +160,14 @@
 		 	radical=false;
 		 	inverse=false;
 		 	model=false;
-			evilAndjustice=false;
+			evilAndjustice=false;}
+			noRepeat=false;
+			monocular=false;
 		}
 		function functionMinus(){
 			var a=document.getElementById("result");
-			var sign=a.value+'-';//只是个输出形式
-			a.value=sign;
+			if(noRepeat==true){
+			a.value=a.value+'-';//只是个输出形式
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -169,12 +181,14 @@
 		 	radical=false;
 		 	inverse=false;
 		 	model=false;
-			evilAndjustice=false;
+			evilAndjustice=false;}
+			noRepeat=false;
+			monocular=false;
 		}
 		function functionMultiply(){
 			var a=document.getElementById("result");
-			var sign=a.value+'*';//只是个输出形式
-			a.value=sign;
+			if(noRepeat==true){
+			a.value=a.value+'*';//只是个输出形式
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -188,12 +202,14 @@
 		 	radical=false;
 		 	inverse=false;
 		 	model=false;
-			evilAndjustice=false;
+			evilAndjustice=false;}
+			noRepeat=false;
+			monocular=false;
 		}
 		function functionDivede(){
 			var a=document.getElementById("result");
-			var sign=a.value+'/';//只是个输出形式
-			a.value=sign;
+			if(noRepeat==true){
+			a.value=a.value+'/';//只是个输出形式
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -207,12 +223,14 @@
 		 	radical=false;
 		 	inverse=false;
 		 	model=false;
-			evilAndjustice=false;
+			evilAndjustice=false;}
+			noRepeat=false;
+			monocular=false;
 		}
 		function functionSquare(){
 			var a=document.getElementById("result");
-			var sign=a.value+'^2';//只是个输出形式
-			a.value=sign;
+			temp=temp*temp;
+			a.value=temp;
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -227,11 +245,12 @@
 		 	inverse=false;
 		 	model=false;
 			evilAndjustice=false;
+			monocular=true;
 		}
 		function functionRadical(){
 			var a=document.getElementById("result");
-			var sign=a.value+'^1/2';//只是个输出形式
-			a.value=sign;
+			if(temp<0)alert("因为我还没有看过根号下还有负数的，所以...");else temp=Math.sqrt(temp);
+			a.value=temp;
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -246,11 +265,12 @@
 		 	inverse=false;
 		 	model=false;
 			evilAndjustice=false;
+			monocular=true;
 		}
 		function functionInverse(){
 			var a=document.getElementById("result");
-			var sign=a.value+'^-1';//只是个输出形式
-			a.value=sign;
+		if(temp==0)alert("其实分母是不可以为零的");else temp=1/temp;
+		a.value=temp;
 			afterOperation=true;//所以说你想要计算了
 			 numMark=false;
 			 //为了确保每次运算后都可以用这个去判断第二操作数是否为个位数
@@ -265,6 +285,7 @@
 		 	radical=false;
 		 	model=false;
 			evilAndjustice=false;
+			monocular=true;
 		}
 		function functionModel(){
 			alert("sorry,wait for a moment");
@@ -298,13 +319,14 @@
 			}
 			 if(self==true&&afterSelf==2){
 			 if(add==true)temp=(numAccumulation-0)+(temp-0);
-			 if(minus==true)temp=(numAccumulation-0)-(temp-0);
+			 if(minus==true)temp=(temp-0)-(numAccumulation-0);
 			 if(multiply==true)temp=(numAccumulation-0)*(temp-0);
-			 if(divede==true)temp=(numAccumulation-0)/(temp-0);
+			 if(divede==true)temp=(temp-0)/(numAccumulation-0);
 			 	}
 			 if(square==true)temp=temp*temp;
 			 if(radical==true){if(temp<0)alert("因为我还没有看过根号下还有负数的，所以...");else temp=Math.sqrt(temp);}
 			 if(inverse==true){if(temp==0)alert("其实分母是不可以为零的");else temp=1/temp;}
+			 //上面的大部分都是为了自加自减等等的情况
 			 // if(evilAndjustice==true)temp=temp*((-1)-0);
 			 a.value=temp;
 			afterOperation=false;
@@ -344,11 +366,34 @@
 		 		 radical=false;
 		 		 inverse=false;
 		 		 model=false;
+		 		 backspace=false;
+		 		 onlyBackspace=false;
+				 noRepeat=false;
+				 monocular=false;
 			}
 			function functionBackspace(){
+				// var i;
 				var a=document.getElementById("result");
-				a.value=a.value.replace(/.$/,'');
-				if(a.value=='')a.value=0;
+			if(backspace==true&&onlyBackspace==true)a.value=0;
+				 // if(self==true&&afterSelf==2){
+			 if(add==true&&backspace==true){temp=(temp-0)-(numAccumulation-0);backspace=false; a.value=temp+'+';}
+			 if(minus==true&&backspace==true){temp=(temp-0)+(numAccumulation-0);backspace=false; a.value=temp+'-';}
+			 if(multiply==true&&backspace==true){temp=(temp-0)/(numAccumulation-0);backspace=false; a.value=temp+'*';}
+			 if(divede==true&&backspace==true){temp=(temp-0)*(numAccumulation-0);backspace=false; a.value=temp+'/';}
+			 // if(monocular==true)temp=0;a.value=temp;
+			 	// }
+				// self=true;
+				// if(self==true&&afterSelf==1)
+				// 	for(i=0;i<selfNum.length;++i)
+				// 		a.value=a.value.replace(/.$/,'');
+				 // if(self==true&&afterSelf==2)
+				//  	for(i=0;i<numAccumulation.length;++i)
+				//  		a.value=a.value.replace(/.$/,'');
+				// // selfNum=0;
+				// numAccumulation=0;
+				// a.value= a.value.substring(0,a.value.length-1);
+				// a.value=a.value.replace(/.$/,'');
+				// if(a.value=='')a.value=0;
 			}
 		</script>
 		</body>
